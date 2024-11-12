@@ -57,8 +57,10 @@ class Board:
     def __str__(self) -> str:
         """String representation of the board"""
         row_str = ""
+        row_num = 0
         for r in self.rows:
-            row_str += f"{r}\n"
+            row_str += f"Row {row_num}: {r}\n"
+            row_num += 1
 
         return f"num_nums_placed: {self.num_nums_placed}\nboard (rows): \n{row_str}"
 
@@ -139,8 +141,17 @@ class Board:
             column - index of the column to assign
             assignment - value to place at given row, column coordinate
         """
-        pass
+        self.rows[row][column] = assignment
 
+        for i in range(self.size):
+            # remove the assignment from the row
+            remove_if_exists(self.rows[row][i], assignment)
+            # remove the assignment from the column
+            remove_if_exists(self.rows[i][column], assignment)
+
+        print(self.subgrid_coordinates(row, column))
+        for i, j in self.subgrid_coordinates(row, column):
+            remove_if_exists(self.rows[i][j], assignment)
 
 def DFS(state: Board) -> Board:
     """Performs a depth first search. Takes a Board and attempts to assign values to
@@ -175,6 +186,20 @@ def BFS(state: Board) -> Board:
 if __name__ == "__main__":
     # uncomment the below lines once you've implemented the board class
    
+    # b = Board()
+    # print(b)
+    # b.print_pretty()
+    # b.update(0, 0, 1)
+    # b.update(0, 2, 2)
+    # b.update(1, 0, 9)
+    # b.update(1, 1, 8)
+    # b.update(0, 4, 3)
+    # b.update(1, 3, 2)
+    # b.update(1,6, 4)
+    # b.update(1, 8, 3)
+    # print(b)
+    # b.print_pretty()
+
     # # CODE BELOW HERE RUNS YOUR BFS/DFS
     # print("<<<<<<<<<<<<<< Solving Sudoku >>>>>>>>>>>>>>")
 
@@ -194,36 +219,36 @@ if __name__ == "__main__":
     #     solution.print_pretty()
 
     # # sets of moves for the different games
-    # first_moves = [
-    #     (0, 1, 7),
-    #     (0, 7, 1),
-    #     (1, 2, 9),
-    #     (1, 3, 7),
-    #     (1, 5, 4),
-    #     (1, 6, 2),
-    #     (2, 2, 8),
-    #     (2, 3, 9),
-    #     (2, 6, 3),
-    #     (3, 1, 4),
-    #     (3, 2, 3),
-    #     (3, 4, 6),
-    #     (4, 1, 9),
-    #     (4, 3, 1),
-    #     (4, 5, 8),
-    #     (4, 7, 7),
-    #     (5, 4, 2),
-    #     (5, 6, 1),
-    #     (5, 7, 5),
-    #     (6, 2, 4),
-    #     (6, 5, 5),
-    #     (6, 6, 7),
-    #     (7, 2, 7),
-    #     (7, 3, 4),
-    #     (7, 5, 1),
-    #     (7, 6, 9),
-    #     (8, 1, 3),
-    #     (8, 7, 8),
-    # ]
+    first_moves = [
+        (0, 1, 7),
+        (0, 7, 1),
+        (1, 2, 9),
+        (1, 3, 7),
+        (1, 5, 4),
+        (1, 6, 2),
+        (2, 2, 8),
+        (2, 3, 9),
+        (2, 6, 3),
+        (3, 1, 4),
+        (3, 2, 3),
+        (3, 4, 6),
+        (4, 1, 9),
+        (4, 3, 1),
+        (4, 5, 8),
+        (4, 7, 7),
+        (5, 4, 2),
+        (5, 6, 1),
+        (5, 7, 5),
+        (6, 2, 4),
+        (6, 5, 5),
+        (6, 6, 7),
+        (7, 2, 7),
+        (7, 3, 4),
+        (7, 5, 1),
+        (7, 6, 9),
+        (8, 1, 3),
+        (8, 7, 8),
+    ]
 
     # second_moves = [
     #     (0, 1, 2),
@@ -290,11 +315,12 @@ if __name__ == "__main__":
 
     # ##Now, let's write some quick tests to check update!
     # #Create a sudoku board.
-    # g = Board()
-    # #Place the 28 assignments in first_moves on the board.
-    # for trip in first_moves:
-    #     g.update(trip[0],trip[1],trip[2])
-    # g.print_pretty()
+    g = Board()
+    #Place the 28 assignments in first_moves on the board.
+    for trip in first_moves:
+        g.update(trip[0],trip[1],trip[2])
+    print(g)
+    g.print_pretty()
     # #From the above print statement, you can see which numbers
     # #  have been assigned to the board, and then create test
     # #  cases by looking at the board and listing what values are
