@@ -179,7 +179,19 @@ def DFS(state: Board) -> Board:
     Returns:
         either None in the case of invalid input or a solved board
     """
-    pass
+    if state.is_solved():
+        return state
+    row, col = state.find_most_constrained_cell()
+    if row is None or col is None:
+        return None
+    for num in range(1,10):
+        if state.is_valid(row,col,num):
+            new_state = state.copy()
+            new_state.grid[row][col] = num
+            result = DFS(new_state)
+            if result is not None:
+                return result
+    return None
 
 
 def BFS(state: Board) -> Board:
