@@ -334,7 +334,7 @@ if __name__ == "__main__":
     b.rows[4][3] = []
     assert b.find_most_constrained_cell() == (4,3), "find most constrained cell test 2"
     assert b.failure_test() == True, "failure test test 2"
-    print("All part 1 tests passed!")
+   
 
   
     g = Board()
